@@ -35,13 +35,13 @@ pub enum UpsertSearchOverrideError {
 }
 
 pub async fn delete_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
 ) -> Result<crate::models::SearchOverride, Error<DeleteSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",
@@ -87,12 +87,12 @@ pub async fn delete_search_override(
 }
 
 pub async fn get_search_overrides(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
 ) -> Result<crate::models::SearchOverridesResponse, Error<GetSearchOverridesError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides",
@@ -138,14 +138,14 @@ pub async fn get_search_overrides(
 
 /// Create or update an override to promote certain documents over others. Using overrides, you can include or exclude specific documents for a given query.
 pub async fn upsert_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
     search_override_schema: crate::models::SearchOverrideSchema,
 ) -> Result<crate::models::SearchOverride, Error<UpsertSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",

@@ -86,12 +86,12 @@ pub enum UpsertAliasError {
 
 /// When a collection is created, we give it a name and describe the fields that will be indexed from the documents added to the collection.
 pub async fn create_collection(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_schema: crate::models::CollectionSchema,
 ) -> Result<crate::models::CollectionResponse, Error<CreateCollectionError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/collections", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -133,12 +133,12 @@ pub async fn create_collection(
 }
 
 pub async fn delete_alias(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     alias_name: &str,
 ) -> Result<crate::models::CollectionAlias, Error<DeleteAliasError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/aliases/{aliasName}",
@@ -184,12 +184,12 @@ pub async fn delete_alias(
 
 /// Permanently drops a collection. This action cannot be undone. For large collections, this might have an impact on read latencies.
 pub async fn delete_collection(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
 ) -> Result<crate::models::CollectionResponse, Error<DeleteCollectionError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}",
@@ -235,12 +235,12 @@ pub async fn delete_collection(
 
 /// Find out which collection an alias points to by fetching it
 pub async fn get_alias(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     alias_name: &str,
 ) -> Result<crate::models::CollectionAlias, Error<GetAliasError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/aliases/{aliasName}",
@@ -285,11 +285,11 @@ pub async fn get_alias(
 
 /// List all aliases and the corresponding collections that they map to.
 pub async fn get_aliases(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<crate::models::CollectionAliasesResponse, Error<GetAliasesError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/aliases", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -331,12 +331,12 @@ pub async fn get_aliases(
 
 /// Retrieve the details of a collection, given its name.
 pub async fn get_collection(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
 ) -> Result<crate::models::CollectionResponse, Error<GetCollectionError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}",
@@ -382,11 +382,11 @@ pub async fn get_collection(
 
 /// Returns a summary of all your collections. The collections are returned sorted by creation date, with the most recent collections appearing first.
 pub async fn get_collections(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<Vec<crate::models::CollectionResponse>, Error<GetCollectionsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/collections", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -428,13 +428,13 @@ pub async fn get_collections(
 
 /// Update a collection's schema to modify the fields and their types.
 pub async fn update_collection(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     collection_update_schema: crate::models::CollectionUpdateSchema,
 ) -> Result<crate::models::CollectionUpdateSchema, Error<UpdateCollectionError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}",
@@ -481,13 +481,13 @@ pub async fn update_collection(
 
 /// Create or update a collection alias. An alias is a virtual collection name that points to a real collection. If you're familiar with symbolic links on Linux, it's very similar to that. Aliases are useful when you want to reindex your data in the background on a new collection and switch your application to it without any changes to your code.
 pub async fn upsert_alias(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     alias_name: &str,
     collection_alias_schema: Option<crate::models::CollectionAliasSchema>,
 ) -> Result<crate::models::CollectionAlias, Error<UpsertAliasError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/aliases/{aliasName}",

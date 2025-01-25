@@ -29,7 +29,7 @@ impl Configuration {
             panic!("Nodes must not be empty!")
         }
         Self {
-            base_path: nodes[0].to_string(),
+            base_path: "http://localhost:8108".to_owned(),
             api_key: Some(ApiKey {
                 prefix: None,
                 key: api_key.into(),
@@ -41,6 +41,11 @@ impl Configuration {
 
     pub fn health_check_interval(mut self, duration: Duration) -> Self {
         self.client.health_check_interval(duration);
+        self
+    }
+
+    pub fn retry_interval(mut self, duration: Duration) -> Self {
+        self.client.retry_interval(duration);
         self
     }
 

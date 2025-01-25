@@ -20,11 +20,11 @@ pub enum HealthError {
 
 /// Checks if Typesense server is ready to accept requests.
 pub async fn health(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<crate::models::HealthStatus, Error<HealthError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/health", local_var_configuration.base_path);
     let mut local_var_req_builder =

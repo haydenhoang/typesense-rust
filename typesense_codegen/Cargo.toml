@@ -12,6 +12,11 @@ serde_derive = "^1.0"
 serde_json = "^1.0"
 url = "^2.2"
 uuid = { version = "^1.0", features = ["serde", "v4", "js"] }
+tokio = { version = "1.41.1", features = ["time", "rt-multi-thread"] }
+
+[dev-dependencies]
+httpmock = "0.8.0-alpha.1"
+serial_test = "*"
 
 [dependencies.reqwest]
 version = "^0.12"

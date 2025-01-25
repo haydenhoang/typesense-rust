@@ -44,12 +44,12 @@ pub enum RetrieveAnalyticsRulesError {
 
 /// When an analytics rule is created, we give it a name and describe the type, the source collections and the destination collection.
 pub async fn create_analytics_rule(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     analytics_rule_schema: crate::models::AnalyticsRuleSchema,
 ) -> Result<crate::models::AnalyticsRuleSchema, Error<CreateAnalyticsRuleError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/analytics/rules", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -92,12 +92,12 @@ pub async fn create_analytics_rule(
 
 /// Permanently deletes an analytics rule, given it's name
 pub async fn delete_analytics_rule(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     rule_name: &str,
 ) -> Result<crate::models::AnalyticsRuleSchema, Error<DeleteAnalyticsRuleError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/analytics/rules/{ruleName}",
@@ -143,12 +143,12 @@ pub async fn delete_analytics_rule(
 
 /// Retrieve the details of an analytics rule, given it's name
 pub async fn retrieve_analytics_rule(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     rule_name: &str,
 ) -> Result<crate::models::AnalyticsRuleSchema, Error<RetrieveAnalyticsRuleError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/analytics/rules/{ruleName}",
@@ -194,11 +194,11 @@ pub async fn retrieve_analytics_rule(
 
 /// Retrieve the details of all analytics rules
 pub async fn retrieve_analytics_rules(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<crate::models::AnalyticsRulesRetrieveSchema, Error<RetrieveAnalyticsRulesError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/analytics/rules", local_var_configuration.base_path);
     let mut local_var_req_builder =

@@ -158,13 +158,13 @@ pub enum UpsertSearchSynonymError {
 
 /// Delete an individual document from a collection by using its ID.
 pub async fn delete_document(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     document_id: &str,
 ) -> Result<serde_json::Value, Error<DeleteDocumentError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/{documentId}",
@@ -211,7 +211,7 @@ pub async fn delete_document(
 
 /// Delete a bunch of documents that match a specific filter condition. Use the `batch_size` parameter to control the number of documents that should deleted at a time. A larger value will speed up deletions, but will impact performance of other operations running on the server.
 pub async fn delete_documents(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     delete_documents_parameters: Option<
         crate::models::DeleteDocumentsDeleteDocumentsParametersParameter,
@@ -219,7 +219,7 @@ pub async fn delete_documents(
 ) -> Result<crate::models::DeleteDocuments200Response, Error<DeleteDocumentsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents",
@@ -267,13 +267,13 @@ pub async fn delete_documents(
 }
 
 pub async fn delete_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
 ) -> Result<crate::models::SearchOverride, Error<DeleteSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",
@@ -319,13 +319,13 @@ pub async fn delete_search_override(
 }
 
 pub async fn delete_search_synonym(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     synonym_id: &str,
 ) -> Result<crate::models::SearchSynonym, Error<DeleteSearchSynonymError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/synonyms/{synonymId}",
@@ -372,7 +372,7 @@ pub async fn delete_search_synonym(
 
 /// Export all documents in a collection in JSON lines format.
 pub async fn export_documents(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     export_documents_parameters: Option<
         crate::models::ExportDocumentsExportDocumentsParametersParameter,
@@ -380,7 +380,7 @@ pub async fn export_documents(
 ) -> Result<String, Error<ExportDocumentsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/export",
@@ -429,13 +429,13 @@ pub async fn export_documents(
 
 /// Fetch an individual document from a collection by using its ID.
 pub async fn get_document(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     document_id: &str,
 ) -> Result<serde_json::Value, Error<GetDocumentError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/{documentId}",
@@ -482,13 +482,13 @@ pub async fn get_document(
 
 /// Retrieve the details of a search override, given its id.
 pub async fn get_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
 ) -> Result<crate::models::SearchOverride, Error<GetSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",
@@ -534,12 +534,12 @@ pub async fn get_search_override(
 }
 
 pub async fn get_search_overrides(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
 ) -> Result<crate::models::SearchOverridesResponse, Error<GetSearchOverridesError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides",
@@ -585,13 +585,13 @@ pub async fn get_search_overrides(
 
 /// Retrieve the details of a search synonym, given its id.
 pub async fn get_search_synonym(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     synonym_id: &str,
 ) -> Result<crate::models::SearchSynonym, Error<GetSearchSynonymError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/synonyms/{synonymId}",
@@ -637,12 +637,12 @@ pub async fn get_search_synonym(
 }
 
 pub async fn get_search_synonyms(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
 ) -> Result<crate::models::SearchSynonymsResponse, Error<GetSearchSynonymsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/synonyms",
@@ -688,7 +688,7 @@ pub async fn get_search_synonyms(
 
 /// The documents to be imported must be formatted in a newline delimited JSON structure. You can feed the output file from a Typesense export operation directly as import.
 pub async fn import_documents(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     body: String,
     import_documents_parameters: Option<
@@ -697,7 +697,7 @@ pub async fn import_documents(
 ) -> Result<String, Error<ImportDocumentsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/import",
@@ -749,14 +749,14 @@ pub async fn import_documents(
 
 /// A document to be indexed in a given collection must conform to the schema of the collection.
 pub async fn index_document(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     body: serde_json::Value,
     action: Option<&str>,
 ) -> Result<serde_json::Value, Error<IndexDocumentError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents",
@@ -807,13 +807,13 @@ pub async fn index_document(
 
 /// This is especially useful to avoid round-trip network latencies incurred otherwise if each of these requests are sent in separate HTTP requests. You can also use this feature to do a federated search across multiple collections in a single HTTP request.
 pub async fn multi_search<D: for<'d> serde::Deserialize<'d>>(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     multi_search_parameters: crate::models::MultiSearchParameters,
     multi_search_searches_parameter: Option<crate::models::MultiSearchSearchesParameter>,
 ) -> Result<crate::models::MultiSearchResult<D>, Error<MultiSearchError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/multi_search", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -857,13 +857,13 @@ pub async fn multi_search<D: for<'d> serde::Deserialize<'d>>(
 
 /// Search for documents in a collection that match the search criteria.
 pub async fn search_collection<D: for<'d> serde::Deserialize<'d>>(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     search_parameters: crate::models::SearchParameters,
 ) -> Result<crate::models::SearchResult<D>, Error<SearchCollectionError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/search",
@@ -910,14 +910,14 @@ pub async fn search_collection<D: for<'d> serde::Deserialize<'d>>(
 
 /// Update an individual document from a collection by using its ID. The update can be partial.
 pub async fn update_document(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     document_id: &str,
     body: serde_json::Value,
 ) -> Result<serde_json::Value, Error<UpdateDocumentError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents/{documentId}",
@@ -965,7 +965,7 @@ pub async fn update_document(
 
 /// The filter_by query parameter is used to filter to specify a condition against which the documents are matched. The request body contains the fields that should be updated for any documents that match the filter condition. This endpoint is only available if the Typesense server is version `0.25.0.rc12` or later.
 pub async fn update_documents(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     body: serde_json::Value,
     update_documents_parameters: Option<
@@ -974,7 +974,7 @@ pub async fn update_documents(
 ) -> Result<crate::models::UpdateDocuments200Response, Error<UpdateDocumentsError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/documents",
@@ -1024,14 +1024,14 @@ pub async fn update_documents(
 
 /// Create or update an override to promote certain documents over others. Using overrides, you can include or exclude specific documents for a given query.
 pub async fn upsert_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
     search_override_schema: crate::models::SearchOverrideSchema,
 ) -> Result<crate::models::SearchOverride, Error<UpsertSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",
@@ -1079,14 +1079,14 @@ pub async fn upsert_search_override(
 
 /// Create or update a synonym  to define search terms that should be considered equivalent.
 pub async fn upsert_search_synonym(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     synonym_id: &str,
     search_synonym_schema: crate::models::SearchSynonymSchema,
 ) -> Result<crate::models::SearchSynonym, Error<UpsertSearchSynonymError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/synonyms/{synonymId}",

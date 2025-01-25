@@ -46,12 +46,12 @@ pub enum GetKeysError {
 
 /// Create an API Key with fine-grain access control. You can restrict access on both a per-collection and per-action level. The generated key is returned only during creation. You want to store this key carefully in a secure place.
 pub async fn create_key(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     api_key_schema: Option<crate::models::ApiKeySchema>,
 ) -> Result<crate::models::ApiKey, Error<CreateKeyError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/keys", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -93,12 +93,12 @@ pub async fn create_key(
 }
 
 pub async fn delete_key(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     key_id: i64,
 ) -> Result<crate::models::ApiKey, Error<DeleteKeyError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/keys/{keyId}",
@@ -144,12 +144,12 @@ pub async fn delete_key(
 
 /// Retrieve (metadata about) a key. Only the key prefix is returned when you retrieve a key. Due to security reasons, only the create endpoint returns the full API key.
 pub async fn get_key(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     key_id: i64,
 ) -> Result<crate::models::ApiKey, Error<GetKeyError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/keys/{keyId}",
@@ -193,11 +193,11 @@ pub async fn get_key(
 }
 
 pub async fn get_keys(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<crate::models::ApiKeysResponse, Error<GetKeysError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/keys", local_var_configuration.base_path);
     let mut local_var_req_builder =

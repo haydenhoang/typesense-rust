@@ -20,13 +20,13 @@ pub enum GetSearchOverrideError {
 
 /// Retrieve the details of a search override, given its id.
 pub async fn get_search_override(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     collection_name: &str,
     override_id: &str,
 ) -> Result<crate::models::SearchOverride, Error<GetSearchOverrideError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!(
         "{}/collections/{collectionName}/overrides/{overrideId}",

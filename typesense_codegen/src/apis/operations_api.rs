@@ -27,12 +27,12 @@ pub enum VoteError {
 
 /// Creates a point-in-time snapshot of a Typesense node's state and data in the specified directory. You can then backup the snapshot directory that gets created and later restore it as a data directory, as needed.
 pub async fn take_snapshot(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
     snapshot_path: &str,
 ) -> Result<crate::models::SuccessStatus, Error<TakeSnapshotError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/operations/snapshot", local_var_configuration.base_path);
     let mut local_var_req_builder =
@@ -76,11 +76,11 @@ pub async fn take_snapshot(
 
 /// Triggers a follower node to initiate the raft voting process, which triggers leader re-election. The follower node that you run this operation against will become the new leader, once this command succeeds.
 pub async fn vote(
-    configuration: &configuration::Configuration,
+    configuration: &mut configuration::Configuration,
 ) -> Result<crate::models::SuccessStatus, Error<VoteError>> {
     let local_var_configuration = configuration;
 
-    let local_var_client = &local_var_configuration.client;
+    let local_var_client = &mut local_var_configuration.client;
 
     let local_var_uri_str = format!("{}/operations/vote", local_var_configuration.base_path);
     let mut local_var_req_builder =

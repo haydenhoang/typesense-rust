@@ -33,7 +33,7 @@ async fn import_documents() {
     .join("\n");
 
     let resp = documents_api::import_documents(
-        Config::get(),
+        &mut Config::get(),
         &Company::collection_schema().name,
         documents,
         None,
@@ -52,7 +52,7 @@ async fn search_collection() {
     };
 
     let resp = documents_api::search_collection::<Company>(
-        Config::get(),
+        &mut Config::get(),
         &Company::collection_schema().name,
         search,
     )

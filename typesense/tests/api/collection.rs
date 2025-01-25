@@ -31,10 +31,9 @@ fn schema_to_resp(schema: CollectionSchema, resp: &CollectionResponse) -> Collec
 
 async fn create_collection() {
     let collection_schema_response =
-        collections_api::create_collection(Config::get(), Company::collection_schema())
+        collections_api::create_collection(&mut Config::get(), Company::collection_schema())
             .await
             .unwrap();
-
     assert_eq!(collection_schema_response.num_documents, 0);
     assert_eq!(
         schema_to_resp(Company::collection_schema(), &collection_schema_response),
@@ -43,9 +42,10 @@ async fn create_collection() {
 }
 
 async fn get_collection() {
-    let collection_schema_response = collections_api::get_collection(Config::get(), "companies")
-        .await
-        .unwrap();
+    let collection_schema_response =
+        collections_api::get_collection(&mut Config::get(), "companies")
+            .await
+            .unwrap();
 
     assert_eq!(collection_schema_response.num_documents, 1250);
     assert_eq!(
@@ -55,9 +55,10 @@ async fn get_collection() {
 }
 
 async fn delete_collection() {
-    let collection_schema_response = collections_api::delete_collection(Config::get(), "companies")
-        .await
-        .unwrap();
+    let collection_schema_response =
+        collections_api::delete_collection(&mut Config::get(), "companies")
+            .await
+            .unwrap();
 
     assert_eq!(collection_schema_response.num_documents, 1200);
     assert_eq!(
@@ -67,7 +68,7 @@ async fn delete_collection() {
 }
 
 async fn get_collections() {
-    let collection_schema_response = collections_api::get_collections(Config::get())
+    let collection_schema_response = collections_api::get_collections(&mut Config::get())
         .await
         .unwrap();
 
