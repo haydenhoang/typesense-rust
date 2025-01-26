@@ -132,7 +132,7 @@ impl APICall {
 
         let is_success = self.handle_result(&mut result, node, is_nearest_node);
 
-        if is_success {
+        if is_success || self.num_retries == 0 {
             return result;
         }
 
