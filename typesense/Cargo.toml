@@ -29,6 +29,7 @@ typesense_codegen = { version = "0.25.0", path = "../typesense_codegen" }
 [dev-dependencies]
 dotenvy = "0.15"
 trybuild = "1.0.42"
+uuid = {version = "1.12.1", features = ["v4"]}
 
 [target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
 tokio = { version = "1.5", features = ["macros", "rt", "rt-multi-thread"] }

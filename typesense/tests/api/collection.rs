@@ -1,24 +1,13 @@
 #![allow(dead_code)]
 
-use super::new_typesense_client;
-use serde::{Deserialize, Serialize};
+use crate::test_utils::{create_new_collection, new_collection_schema, Company};
 use typesense::document::Document;
-use typesense::Typesense;
-use typesense_codegen::models::{CollectionResponse, CollectionSchema};
 
-#[derive(Typesense, Serialize, Deserialize)]
-#[typesense(collection_name = "companies", default_sorting_field = "num_employees")]
-struct Company {
-    company_name: String,
-    num_employees: i32,
-    #[typesense(facet)]
-    country: String,
-}
+use super::new_typesense_client;
 
 async fn create_collection() {
-    let mut client = new_typesense_client();
-    let expected_data = Company::collection_schema();
-    let res = client
+    let expected_data = new_collection_schema("companies");
+    let res = new_typesense_client()
         .collections()
         .create(expected_data.clone())
         .await
@@ -27,26 +16,28 @@ async fn create_collection() {
     assert_eq!(expected_data.fields.len(), res.fields.len());
 }
 
-// async fn get_collection() {
-//     let res = collections_api::get_collection(&mut Config::get(), "companies")
-//         .await
-//         .unwrap();
+async fn get_collection() {
+    let expected = create_new_collection("companies").await;
+    let res = new_typesense_client()
+        .collection(&expected.name)
+        .retrieve()
+        .await
+        .unwrap();
 
-//     assert_eq!(res.num_documents, 1250);
-//     assert_eq!(schema_to_resp(Company::collection_schema(), &res), res);
-// }
+    assert_eq!(res.name, expected.name);
+    assert_eq!(res.fields, expected.fields);
+}
 
 async fn delete_collection() {
-    // let collection_schema_response =
-    //     collections_api::delete_collection(&mut Config::get(), "companies")
-    //         .await
-    //         .unwrap();
+    let expected = create_new_collection("companies").await;
+    let res = new_typesense_client()
+        .collection(&expected.name)
+        .delete()
+        .await
+        .unwrap();
 
-    // assert_eq!(collection_schema_response.num_documents, 1200);
-    // assert_eq!(
-    //     schema_to_resp(Company::collection_schema(), &collection_schema_response),
-    //     collection_schema_response
-    // );
+    assert_eq!(res.name, expected.name);
+    assert_eq!(res.fields, expected.fields);
 }
 
 async fn get_all_collections() {
@@ -66,15 +57,15 @@ mod tokio_test {
         create_collection().await
     }
 
-    // #[tokio::test]
-    // async fn get_collection_tokio() {
-    //     get_collection().await
-    // }
+    #[tokio::test]
+    async fn get_collection_tokio() {
+        get_collection().await
+    }
 
-    // #[tokio::test]
-    // async fn delete_collection_tokio() {
-    //     delete_collection().await
-    // }
+    #[tokio::test]
+    async fn delete_collection_tokio() {
+        delete_collection().await
+    }
 
     #[tokio::test]
     async fn get_all_collections_tokio() {

@@ -4,9 +4,11 @@
 //! is roughly equivalent to a table in a relational database.
 //!
 //!
+use collection::Collection;
 use collections::Collections;
 use typesense_codegen::apis::configuration::Configuration;
 
+mod collection;
 mod collections;
 /// Typesense is
 pub struct TypesenseClient {
@@ -14,10 +16,18 @@ pub struct TypesenseClient {
 }
 
 impl TypesenseClient {
-    /// Typesense Collection API
+    /// Typesense Collections API
     pub fn collections(&mut self) -> Collections {
         Collections {
             configuration: &mut self.configuration,
+        }
+    }
+
+    /// Typesense Collection API
+    pub fn collection<'a, 'b>(&'a mut self, name: &'b str) -> Collection<'a, 'b> {
+        Collection {
+            configuration: &mut self.configuration,
+            name,
         }
     }
 }
