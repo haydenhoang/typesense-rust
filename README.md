@@ -15,4 +15,13 @@ docker run --rm \
     -o /local/typesense_codegen_new
 ```
 
-If you'd like to contribute, please join our [Slack Community](https://join.slack.com/t/typesense-community/shared_invite/zt-mx4nbsbn-AuOL89O7iBtvkz136egSJg) and say hello! 
+Run integration tests
+
+```sh
+# for windows
+$env:URL="http://localhost:8108"
+$env:API_KEY="xyz"
+cargo test --features tokio_test
+```
+
+If you'd like to contribute, please join our [Slack Community](https://join.slack.com/t/typesense-community/shared_invite/zt-mx4nbsbn-AuOL89O7iBtvkz136egSJg) and say hello!
