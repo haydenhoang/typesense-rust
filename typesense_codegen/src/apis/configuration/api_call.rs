@@ -489,8 +489,8 @@ mod test {
         let _ = create_collection(
             config,
             CollectionSchema::new(
-                "test-collection".to_owned(),
                 vec![Field::new("num-employees".to_owned(), "int".to_owned())],
+                "test-collection".to_owned(),
             ),
         )
         .await;

@@ -1,7 +1,6 @@
 #![allow(dead_code)]
 
-use crate::test_utils::{create_new_collection, new_collection_schema, Company};
-use typesense::document::Document;
+use crate::test_utils::{create_new_collection, new_collection_schema};
 
 use super::new_typesense_client;
 

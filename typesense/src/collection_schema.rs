@@ -10,12 +10,7 @@ pub use typesense_codegen::models::CollectionSchema;
 /// Builder for the [CollectionSchema] struct.
 #[derive(Debug, Default)]
 pub struct CollectionSchemaBuilder {
-    name: String,
-    fields: Vec<Field>,
-    default_sorting_field: Option<String>,
-    token_separators: Option<Vec<String>>,
-    enable_nested_fields: Option<bool>,
-    symbols_to_index: Option<Vec<String>>,
+    inner: CollectionSchema,
 }
 
 impl CollectionSchemaBuilder {
@@ -23,51 +18,49 @@ impl CollectionSchemaBuilder {
     #[inline]
     pub fn new(name: impl Into<String>, fields: Vec<Field>) -> Self {
         Self {
-            name: name.into(),
-            fields,
-            ..Default::default()
+            inner: CollectionSchema::new(fields, name.into()),
         }
     }
 
     /// Insert field
     #[inline]
     pub fn field(mut self, field: Field) -> Self {
-        self.fields.push(field);
+        self.inner.fields.push(field);
         self
     }
 
     /// Set fields
     #[inline]
     pub fn fields(mut self, fields: &[Field]) -> Self {
-        self.fields.extend_from_slice(fields);
+        self.inner.fields.extend_from_slice(fields);
         self
     }
 
     /// Set default sorting field
     #[inline]
     pub fn default_sorting_field(mut self, default_sorting_field: impl Into<String>) -> Self {
-        self.default_sorting_field = Some(default_sorting_field.into());
+        self.inner.default_sorting_field = Some(default_sorting_field.into());
         self
     }
 
     /// Set token separators
     #[inline]
     pub fn token_separators(mut self, token_separators: Vec<String>) -> Self {
-        self.token_separators = Some(token_separators);
+        self.inner.token_separators = Some(token_separators);
         self
     }
 
     /// Enable nested fields
     #[inline]
     pub fn enable_nested_fields(mut self, enable_nested_fields: Option<bool>) -> Self {
-        self.enable_nested_fields = enable_nested_fields;
+        self.inner.enable_nested_fields = enable_nested_fields;
         self
     }
 
     /// Set symbols to index
     #[inline]
     pub fn symbols_to_index(mut self, symbols_to_index: Vec<String>) -> Self {
-        self.symbols_to_index = Some(symbols_to_index);
+        self.inner.symbols_to_index = Some(symbols_to_index);
         self
     }
 
@@ -75,14 +68,7 @@ impl CollectionSchemaBuilder {
     /// It can fail if any of the required fields is not not defined.
     #[inline]
     pub fn build(self) -> CollectionSchema {
-        CollectionSchema {
-            name: self.name,
-            fields: self.fields,
-            default_sorting_field: self.default_sorting_field,
-            token_separators: self.token_separators,
-            enable_nested_fields: self.enable_nested_fields,
-            symbols_to_index: self.symbols_to_index,
-        }
+        self.inner
     }
 }
 
