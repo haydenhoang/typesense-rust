@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_search_override_0**](OverrideApi.md#get_search_override_0) | **GET** /collections/{collectionName}/overrides/{overrideId} | Retrieve a single search override
+[**get_search_override**](OverrideApi.md#get_search_override) | **GET** /collections/{collectionName}/overrides/{overrideId} | Retrieve a single search override
 
 
 
-## get_search_override_0
+## get_search_override
 
-> models::SearchOverride get_search_override_0(collection_name, override_id)
+> models::SearchOverride get_search_override(collection_name, override_id)
 Retrieve a single search override
 
 Retrieve the details of a search override, given its id.

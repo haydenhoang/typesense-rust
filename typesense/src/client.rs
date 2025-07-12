@@ -4,12 +4,13 @@
 //! is roughly equivalent to a table in a relational database.
 //!
 //!
+mod collection;
+mod collections;
+
 use collection::Collection;
 use collections::Collections;
 use typesense_codegen::apis::configuration::Configuration;
 
-mod collection;
-mod collections;
 /// Typesense is
 pub struct TypesenseClient {
     configuration: Configuration,
@@ -24,10 +25,10 @@ impl TypesenseClient {
     }
 
     /// Typesense Collection API
-    pub fn collection<'a, 'b>(&'a mut self, name: &'b str) -> Collection<'a, 'b> {
+    pub fn collection(&mut self, name: impl Into<String>) -> Collection {
         Collection {
             configuration: &mut self.configuration,
-            name,
+            collection_name: name.into(),
         }
     }
 }

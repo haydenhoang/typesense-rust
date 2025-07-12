@@ -1,5 +1,6 @@
 use reqwest::{Error, IntoUrl, Method, Request, RequestBuilder, Response};
 use std::{
+    sync::{Arc, RwLock},
     time::{Duration, SystemTime, UNIX_EPOCH},
     vec,
 };
@@ -16,7 +17,7 @@ pub struct Node {
 pub struct APICall {
     pub nearest_node: Option<Node>,
     pub nodes: Vec<Node>,
-    current_node_index: isize,
+    current_node_index: Arc<RwLock<isize>>,
     client: reqwest::Client,
     pub num_retries: usize,
     pub health_check_interval: Duration,
@@ -62,7 +63,7 @@ impl APICall {
 impl Default for APICall {
     fn default() -> Self {
         APICall {
-            current_node_index: -1,
+            current_node_index: Arc::new(RwLock::new(-1)),
             client: reqwest::Client::new(),
             nodes: vec![],
             num_retries: 5,
@@ -80,9 +81,7 @@ impl APICall {
 
     fn clone_request(&mut self, request: &Request) -> (Request, Node, bool) {
         let (mut node, is_nearest_node) = self.get_next_node();
-        let mut my_req = request
-            .try_clone()
-            .expect("Cannot clone the reqwest Request!");
+        let mut my_req = request.try_clone().expect("Cannot clone the reqwest Request!");
         node.url.set_path(my_req.url().path());
         *my_req.url_mut() = node.url.clone();
         println!("{}", my_req.url());
@@ -93,16 +92,21 @@ impl APICall {
         if is_nearest_node {
             self.nearest_node = Some(set_node_health(node, is_healthy));
         } else {
-            self.nodes[self.current_node_index as usize] = set_node_health(node, is_healthy);
+            self.nodes[self.get_current_node_index()] = set_node_health(node, is_healthy);
         }
     }
 
-    fn handle_result(
-        &mut self,
-        result: &mut Result<Response, Error>,
-        node: Node,
-        is_nearest_node: bool,
-    ) -> bool {
+    fn update_current_node_index(&self, index: isize) {
+        let mut count = self.current_node_index.write().unwrap();
+        *count = index;
+    }
+
+    fn get_current_node_index(&self) -> usize {
+        let count = self.current_node_index.read().unwrap();
+        *count as usize
+    }
+
+    fn handle_result(&mut self, result: &mut Result<Response, Error>, node: Node, is_nearest_node: bool) -> bool {
         match result {
             Ok(response) => {
                 if response.status().is_server_error() {
@@ -219,7 +223,7 @@ mod test {
 
     use crate::{
         apis::{
-            collections_api::create_collection,
+            collections_api::{create_collection, CreateCollectionParams},
             configuration::{api_call::default_get_unix_mili, Configuration},
         },
         models::{CollectionSchema, Field},
@@ -253,8 +257,7 @@ mod test {
         let (servers, base_urls) = spawn_servers(handlers.len());
         let mocks = start_mocks(&servers, handlers);
 
-        let mut config: Configuration =
-            Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect());
+        let mut config: Configuration = Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect());
 
         create_typesense_collection(&mut config).await;
 
@@ -282,10 +285,9 @@ mod test {
         let (servers, base_urls) = spawn_servers(handlers.len());
         let mocks = start_mocks(&servers, handlers);
 
-        let mut config: Configuration =
-            Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect())
-                .retry_interval(Duration::from_secs(0))
-                .build();
+        let mut config: Configuration = Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect())
+            .retry_interval(Duration::from_secs(0))
+            .build();
 
         create_typesense_collection(&mut config).await;
 
@@ -318,11 +320,10 @@ mod test {
         unsafe {
             TIME_FN = || 1;
         }
-        let mut config: Configuration =
-            Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect())
-                .health_check_interval(Duration::from_millis(50))
-                .retry_interval(Duration::from_secs(0))
-                .build();
+        let mut config: Configuration = Configuration::new("xyz", base_urls.iter().map(|url| url.as_str()).collect())
+            .health_check_interval(Duration::from_millis(50))
+            .retry_interval(Duration::from_secs(0))
+            .build();
 
         create_typesense_collection(&mut config).await; // node 1 fails, node 2 succeeds
         mocks[0].assert_calls(1);
@@ -373,14 +374,11 @@ mod test {
         let (servers, base_urls) = spawn_servers(handlers.len());
         let mocks = start_mocks(&servers, handlers);
 
-        let mut config: Configuration = Configuration::new(
-            "xyz",
-            base_urls[1..].iter().map(|url| url.as_str()).collect(),
-        )
-        .health_check_interval(Duration::from_millis(50))
-        .nearest_node(base_urls[0].as_str())
-        .retry_interval(Duration::from_secs(0))
-        .build();
+        let mut config: Configuration = Configuration::new("xyz", base_urls[1..].iter().map(|url| url.as_str()).collect())
+            .health_check_interval(Duration::from_millis(50))
+            .nearest_node(base_urls[0].as_str())
+            .retry_interval(Duration::from_secs(0))
+            .build();
 
         create_typesense_collection(&mut config).await;
         mocks[0].assert_calls(1);
@@ -415,14 +413,11 @@ mod test {
         unsafe {
             TIME_FN = || 1;
         }
-        let mut config: Configuration = Configuration::new(
-            "xyz",
-            base_urls[1..].iter().map(|url| url.as_str()).collect(),
-        )
-        .health_check_interval(Duration::from_millis(50))
-        .nearest_node(base_urls[0].as_str())
-        .retry_interval(Duration::from_secs(0))
-        .build();
+        let mut config: Configuration = Configuration::new("xyz", base_urls[1..].iter().map(|url| url.as_str()).collect())
+            .health_check_interval(Duration::from_millis(50))
+            .nearest_node(base_urls[0].as_str())
+            .retry_interval(Duration::from_secs(0))
+            .build();
 
         create_typesense_collection(&mut config).await; // nearest node fails, node 2 succeeds
         assert_eq!(mocks[0].calls(), 1);
@@ -488,10 +483,12 @@ mod test {
     async fn create_typesense_collection(config: &mut Configuration) {
         let _ = create_collection(
             config,
-            CollectionSchema::new(
-                vec![Field::new("num-employees".to_owned(), "int".to_owned())],
-                "test-collection".to_owned(),
-            ),
+            CreateCollectionParams::builder()
+                .collection_schema(CollectionSchema::new(
+                    vec![Field::new("num-employees".to_owned(), "int".to_owned())],
+                    "test-collection".to_owned(),
+                ))
+                .build(),
         )
         .await;
     }

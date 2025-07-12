@@ -16,7 +16,7 @@ pub enum Error<T> {
     ResponseError(ResponseContent<T>),
 }
 
-impl <T> fmt::Display for Error<T> {
+impl<T> fmt::Display for Error<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (module, e) = match self {
             Error::Reqwest(e) => ("reqwest", e.to_string()),
@@ -28,7 +28,7 @@ impl <T> fmt::Display for Error<T> {
     }
 }
 
-impl <T: fmt::Debug> error::Error for Error<T> {
+impl<T: fmt::Debug> error::Error for Error<T> {
     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
         Some(match self {
             Error::Reqwest(e) => e,
@@ -39,19 +39,19 @@ impl <T: fmt::Debug> error::Error for Error<T> {
     }
 }
 
-impl <T> From<reqwest::Error> for Error<T> {
+impl<T> From<reqwest::Error> for Error<T> {
     fn from(e: reqwest::Error) -> Self {
         Error::Reqwest(e)
     }
 }
 
-impl <T> From<serde_json::Error> for Error<T> {
+impl<T> From<serde_json::Error> for Error<T> {
     fn from(e: serde_json::Error) -> Self {
         Error::Serde(e)
     }
 }
 
-impl <T> From<std::io::Error> for Error<T> {
+impl<T> From<std::io::Error> for Error<T> {
     fn from(e: std::io::Error) -> Self {
         Error::Io(e)
     }
@@ -67,18 +67,12 @@ pub fn parse_deep_object(prefix: &str, value: &serde_json::Value) -> Vec<(String
 
         for (key, value) in object {
             match value {
-                serde_json::Value::Object(_) => params.append(&mut parse_deep_object(
-                    &format!("{}[{}]", prefix, key),
-                    value,
-                )),
+                serde_json::Value::Object(_) => params.append(&mut parse_deep_object(&format!("{}[{}]", prefix, key), value)),
                 serde_json::Value::Array(array) => {
                     for (i, value) in array.iter().enumerate() {
-                        params.append(&mut parse_deep_object(
-                            &format!("{}[{}][{}]", prefix, key, i),
-                            value,
-                        ));
+                        params.append(&mut parse_deep_object(&format!("{}[{}][{}]", prefix, key, i), value));
                     }
-                },
+                }
                 serde_json::Value::String(s) => params.push((format!("{}[{}]", prefix, key), s.clone())),
                 _ => params.push((format!("{}[{}]", prefix, key), value.to_string())),
             }
@@ -90,18 +84,6 @@ pub fn parse_deep_object(prefix: &str, value: &serde_json::Value) -> Vec<(String
     unimplemented!("Only objects are supported with style=deepObject")
 }
 
-pub mod analytics_api;
-pub mod collections_api;
-pub mod conversations_api;
-pub mod curation_api;
-pub mod debug_api;
 pub mod documents_api;
-pub mod health_api;
-pub mod keys_api;
-pub mod operations_api;
-pub mod override_api;
-pub mod presets_api;
-pub mod stopwords_api;
-pub mod synonyms_api;
 
 pub mod configuration;

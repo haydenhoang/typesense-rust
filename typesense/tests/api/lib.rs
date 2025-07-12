@@ -1,9 +1,9 @@
-use typesense::client::TypesenseClient;
-use typesense_codegen::apis::configuration::Configuration;
-
 mod collection;
 mod documents;
 mod test_utils;
+
+use typesense::client::TypesenseClient;
+use typesense_codegen::apis::configuration::Configuration;
 
 #[cfg(not(target_arch = "wasm32"))]
 fn new_typesense_client() -> TypesenseClient {

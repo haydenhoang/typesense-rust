@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 
-use crate::test_utils::{create_new_collection, new_collection_schema};
-
 use super::new_typesense_client;
+use crate::test_utils::{create_new_collection, new_collection_schema};
 
 async fn create_collection() {
     let expected_data = new_collection_schema("companies");
