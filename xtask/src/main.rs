@@ -1,5 +1,3 @@
-#![cfg(not(target_family = "wasm"))]
-
 use anyhow::{Context, Result};
 use clap::{Parser, ValueEnum};
 use std::env;
@@ -42,6 +40,7 @@ enum Task {
 #[cfg(target_family = "wasm")]
 fn main() {}
 
+#[cfg(not(target_family = "wasm"))]
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
@@ -55,6 +54,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+#[cfg(not(target_family = "wasm"))]
 fn task_fetch_api_spec() -> Result<()> {
     println!("▶️  Running codegen task...");
 
@@ -76,6 +76,7 @@ fn task_fetch_api_spec() -> Result<()> {
     Ok(())
 }
 
+#[cfg(not(target_family = "wasm"))]
 /// Task to generate client code from the OpenAPI spec using a Docker container.
 fn task_codegen() -> Result<()> {
     println!("▶️  Running codegen task via Docker...");
