@@ -76,7 +76,6 @@ fn task_fetch_api_spec() -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(target_family = "wasm"))]
 /// Task to generate client code from the OpenAPI spec using a Docker container.
 fn task_codegen() -> Result<()> {
     println!("▶️  Running codegen task via Docker...");
