@@ -37,10 +37,10 @@ enum Task {
     CodeGen,
 }
 
-#[cfg(target_family = "wasm")]
+#[cfg(target_arch = "wasm32")]
 fn main() {}
 
-#[cfg(not(target_family = "wasm"))]
+#[cfg(not(target_arch = "wasm32"))]
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
