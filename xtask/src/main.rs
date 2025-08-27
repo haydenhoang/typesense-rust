@@ -1,5 +1,3 @@
-#![cfg(not(target_arch = "wasm32"))]
-
 use anyhow::{Context, Result};
 use clap::{Parser, ValueEnum};
 use std::env;
@@ -39,6 +37,10 @@ enum Task {
     CodeGen,
 }
 
+#[cfg(target_family = "wasm")]
+fn main() {}
+
+#[cfg(not(target_family = "wasm"))]
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
